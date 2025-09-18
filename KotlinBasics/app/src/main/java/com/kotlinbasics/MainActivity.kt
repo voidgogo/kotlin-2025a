@@ -1,6 +1,7 @@
 package com.kotlinbasics
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -99,55 +100,105 @@ private fun week02Functions() {
 }
 
 private fun week03Classes() {
-    println("=== Kotlin Classes ===")
+    Log.d("KotlinWeek03", "=== 3주차: 클래스 실습 시작 ===")
 
-    // 기본 클래스
-    class Student {
-        var name: String = ""
-        var age: Int = 0
-
+    // 1. 기본 클래스 정의와 인스턴스
+    class Person(val name: String, var age: Int) {  // 기본 생성자
         fun introduce() {
-            println("Hi, I'm $name and I'm $age years old")
+            Log.d("KotlinWeek03", "안녕하세요, $name ($age 세)입니다.")
+        }
+        fun birthday() {
+            age++
+            Log.d("KotlinWeek03", "$name 의 생일! 이제 $age 세.")
         }
     }
 
-    val student = Student()
-    student.name = "Alice"
-    student.age = 20
-    student.introduce()
+    val person1 = Person("홍길동", 25)
+    person1.introduce()
+    person1.birthday()
 
-    // 데이터 클래스
-    data class Person(val name: String, val age: Int)
+    // 2. 보조 생성자 (init 블록 활용)
+    open class Animal(var species: String) {
+        var weight: Double = 0.0
+        constructor(species: String, weight: Double) : this(species) {  // 보조 생성자
+            this.weight = weight
+            Log.d("KotlinWeek03", "$species 의 무게: $weight kg")
+        }
+        open fun makeSound() {  // 오버라이드 가능
+            Log.d("KotlinWeek03", "$species 가 소리를 냅니다.")
+        }
+    }
 
-    val person1 = Person("Bob", 25)
-    val person2 = Person("Bob", 25)
+    val dog = Animal("개", 10.5)
+    dog.makeSound()
 
-    println("Person1: $person1")
-    println("Equal? ${person1 == person2}")
+    // 3. 상속
+    class Dog(species: String, weight: Double, val breed: String) : Animal(species, weight) {
+        override fun makeSound() {
+            Log.d("KotlinWeek03", "$breed($species)가 멍멍 짖습니다!")
+        }
+    }
+
+    val myDog = Dog("개", 15.0, "골든 리트리버")
+    myDog.makeSound()
+
+    // 4. 데이터 클래스 (equals, hashCode, toString 자동 생성)
+    data class Book(val title: String, val author: String, val pages: Int)
+
+    val book1 = Book("코틀린 입문", "John Doe", 300)
+    val book2 = Book("코틀린 입문", "John Doe", 300)
+    Log.d("KotlinWeek03", "book1 == book2: ${book1 == book2}")  // true
+    Log.d("KotlinWeek03", "book1: $book1")  // toString 자동 출력
+
+    Log.d("KotlinWeek03", "=== 클래스 실습 끝 ===")
 }
 
-private fun week03Collections(){
-    println("=== Kotlin Collections ===")
+private fun week03Collections() {
+    Log.d("KotlinWeek03", "=== 3주차: 컬렉션 실습 시작 ===")
 
-    val fruits = listOf("apple", "banana", "orange")
-    val mutableFruits = mutableListOf("apple", "banana")
+    // 1. List (순서 있음, 중복 허용)
+    val fruits = listOf("사과", "바나나", "사과")  // 불변 List
+    Log.d("KotlinWeek03", "과일 목록: $fruits")
+    Log.d("KotlinWeek03", "사과 개수: ${fruits.count { it == "사과" }}")  // 람다로 카운트
 
-    println("Fruits: $fruits")
-    mutableFruits.add("grape")
-    println("Mutable fruits: $mutableFruits")
+    val mutableFruits = mutableListOf("오렌지")
+    mutableFruits.addAll(fruits)
+    mutableFruits.remove("바나나")
+    Log.d("KotlinWeek03", "변경된 목록: $mutableFruits")
 
-// 맵
+    // 2. Set (순서 없음, 중복 불가)
+    val uniqueNumbers = setOf(1, 2, 2, 3)
+    Log.d("KotlinWeek03", "고유 숫자: $uniqueNumbers")  // [1, 2, 3]
+
+    val mutableSet = mutableSetOf(4, 5)
+    mutableSet.addAll(uniqueNumbers)
+    Log.d("KotlinWeek03", "합친 Set: $mutableSet")
+
+    // 3. Map (키-값 쌍)
     val scores = mapOf("Alice" to 95, "Bob" to 87, "Charlie" to 92)
-    println("Scores: $scores")
+    Log.d("KotlinWeek03", "성적: $scores")
+    Log.d("KotlinWeek03", "Alice 점수: ${scores["Alice"]}")
 
-// 반복문
-    for (fruit in fruits) {
-        println("I like $fruit")
-    }
+    val mutableScores = scores.toMutableMap()
+    mutableScores["David"] = 88
+    mutableScores.remove("Bob")
+    Log.d("KotlinWeek03", "변경된 성적: $mutableScores")
 
-    scores.forEach { (name, score) ->
-        println("$name scored $score")
+    // 4. 컬렉션 연산 (filter, map, forEach)
+    val numbers = listOf(1, 2, 3, 4, 5)
+    val evens = numbers.filter { it % 2 == 0 }  // 짝수 필터
+    val squares = evens.map { it * it }  // 제곱 매핑
+    Log.d("KotlinWeek03", "짝수: $evens, 제곱: $squares")
+
+    squares.forEach { Log.d("KotlinWeek03", "제곱 값: $it") }
+
+    // 5. 확장 함수 예시 (List 확장)
+    fun <T> List<T>.printEach() {  // 확장 함수
+        this.forEachIndexed { index, item -> Log.d("KotlinWeek03", "[$index]: $item") }
     }
+    fruits.printEach()
+
+    Log.d("KotlinWeek03", "=== 컬렉션 실습 끝 ===")
 }
 
 @Composable
