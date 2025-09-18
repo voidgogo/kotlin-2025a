@@ -28,21 +28,17 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // 1주차: 변수 학습
-        week01Variables()
+        week02Variables()
 
-        // 1주차: 함수 학습
-        week01Functions()
+        week02Functions()
 
-        // 1주차: 클래스 학습
-        week01Classes()
+        week03Classes()
 
-        // 1주차: 컬렉션 학습
-        week01Collections()
+        week03Collections()
     }
 }
 
-private fun week01Variables() {
+private fun week02Variables() {
 //    println("=== Week 1: Variables ===")
 //
 //    val courseName = "Mobile Programming"
@@ -72,7 +68,7 @@ private fun week01Variables() {
     println("Nickname: ${nickname?.length}")
 }
 
-private fun week01Functions() {
+private fun week02Functions() {
 //    println("=== Week 1: Functions ===")
 //
 //    fun greet(name: String) = "Hello, $name!"
@@ -102,7 +98,7 @@ private fun week01Functions() {
     introduce("Bob", 25)
 }
 
-private fun week01Classes() {
+private fun week03Classes() {
     println("=== Kotlin Classes ===")
 
     // 기본 클래스
@@ -130,11 +126,9 @@ private fun week01Classes() {
     println("Equal? ${person1 == person2}")
 }
 
-private fun week01Collections(){
-    // 컬렉션
+private fun week03Collections(){
     println("=== Kotlin Collections ===")
 
-// 리스트
     val fruits = listOf("apple", "banana", "orange")
     val mutableFruits = mutableListOf("apple", "banana")
 
