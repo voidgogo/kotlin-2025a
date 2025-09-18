@@ -1,4 +1,4 @@
-# Kotlin Basics 2025a
+# Mobile Programming, Fall 2025 Semester
 
 This repository contains the source code and documentation for a Kotlin learning project, developed in Android Studio using the Compose Empty Activity template. The project is structured as a series of weekly exercises to build foundational Kotlin skills for Android development.
 
@@ -49,3 +49,6 @@ This repository contains the source code and documentation for a Kotlin learning
 1. **Clone the Repository** (if not already local):
    ```bash
    git clone <repository-url>
+
+## License
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
