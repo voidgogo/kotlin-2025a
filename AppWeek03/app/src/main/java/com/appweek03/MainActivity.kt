@@ -23,25 +23,53 @@ import android.widget.TextView
 //    }
 //}
 
+
+//class MainActivity : AppCompatActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_main)
+//
+//        val editTextName = findViewById<EditText>(R.id.editTextName)
+//        val buttonGreet = findViewById<Button>(R.id.buttonGreet)
+//        val textViewGreeting = findViewById<TextView>(R.id.textViewGreeting)
+//
+//        buttonGreet.setOnClickListener {
+//            val name = editTextName.text.toString().trim()
+//
+//            if (name.isNotEmpty()) {
+//                textViewGreeting.text = "안녕하세요, ${name}님!"
+//                textViewGreeting.visibility = View.VISIBLE
+//            } else {
+//                textViewGreeting.text = "이름을 입력해주세요"
+//                textViewGreeting.visibility = View.VISIBLE
+//            }
+//        }
+//    }
+//}
+
+
+import android.content.Intent
+
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val editTextName = findViewById<EditText>(R.id.editTextName)
-        val buttonGreet = findViewById<Button>(R.id.buttonGreet)
-        val textViewGreeting = findViewById<TextView>(R.id.textViewGreeting)
+        val buttonGreeting = findViewById<Button>(R.id.buttonGreeting)
+        val buttonColor = findViewById<Button>(R.id.buttonColor)
+        val buttonCounter = findViewById<Button>(R.id.buttonCounter)
 
-        buttonGreet.setOnClickListener {
-            val name = editTextName.text.toString().trim()
+        buttonGreeting.setOnClickListener {
+            startActivity(Intent(this, GreetingActivity::class.java))
+        }
 
-            if (name.isNotEmpty()) {
-                textViewGreeting.text = "안녕하세요, ${name}님!"
-                textViewGreeting.visibility = View.VISIBLE
-            } else {
-                textViewGreeting.text = "이름을 입력해주세요"
-                textViewGreeting.visibility = View.VISIBLE
-            }
+        buttonColor.setOnClickListener {
+            startActivity(Intent(this, ColorActivity::class.java))
+        }
+
+        buttonCounter.setOnClickListener {
+            startActivity(Intent(this, CounterActivity::class.java))
         }
     }
 }
