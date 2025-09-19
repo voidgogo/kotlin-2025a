@@ -27,10 +27,32 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        week02Variables()
-        week02Functions()
-        week03Classes()
+//        week02Variables()
+//        week02Functions()
+//        week03Classes()
+        week03Collections()
     }
+}
+
+private fun week03Collections(){
+    println("== Kotlin Collections ==")
+
+    val fruits = listOf("apple", "banana", "orange")
+    val mutableFruits = mutableListOf("kiwi", "watermelon")
+
+    //fruits.add("kiwi")
+    println("Fruits : $fruits")
+    mutableFruits.add("banana")
+    println("Mutable fruits : $mutableFruits")
+
+    val scores = mapOf("Kim" to 100, "Park" to 97, "Lee" to 99)
+    println("Scores : $scores")
+
+    for(fruit in mutableFruits){
+        println("I like $fruit")
+    }
+
+    scores.forEach{(name, score) -> println("$name scored $score")}
 }
 
 private fun week03Classes(){
@@ -48,6 +70,14 @@ private fun week03Classes(){
     student.name = "Mirae"
     student.age = 21
     student.introduce()
+
+    data class Person(val name: String, val age: Int)
+
+    val person1 = Person("Kim", 23)
+    val person2 = Person("Kim", 23)
+
+    println("Person1 : $person1")
+    println("Equal? ${person1 == person2}")
 }
 
 
