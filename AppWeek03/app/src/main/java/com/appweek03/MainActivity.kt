@@ -57,13 +57,16 @@ class MainActivity : AppCompatActivity() {
 
         val buttonGreeting = findViewById<Button>(R.id.buttonGreeting)
         val buttonColor = findViewById<Button>(R.id.buttonColor)
+        val buttonCounter = findViewById<Button>(R.id.buttonCounter)
 
         buttonGreeting.setOnClickListener {
             startActivity(Intent(this, GreetingActivity::class.java))
         }
-
         buttonColor.setOnClickListener {
             startActivity(Intent(this, ColorActivity::class.java))
+        }
+        buttonCounter.setOnClickListener {
+            startActivity(Intent(this, CounterActivity::class.java))
         }
     }
 }
