@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 1. **Create New Project** in Android Studio:
     - Choose "Empty Views Activity"
     - Project name: `AppWeek05`
-    - Package name: `com.example.appweek05`
+    - Package name: `com.appweek05`
     - Save location: `D:\kotlin-2025a\AppWeek05`
 
 2. **Initial Setup**:
@@ -142,8 +142,3 @@ By completing Week 05, students will:
 - Practice user input validation and data manipulation
 - Learn item selection and removal techniques
 - Apply Git branching strategies for feature development
-
-## Next Steps
-- Week 06 will focus on RecyclerView and advanced list handling
-- Integration with databases (SQLite/Room)
-- Custom adapter implementations for complex list items

@@ -109,7 +109,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Week 05: ListView and Data Handling"
+        android:text="Week05 : ListView and Data Handling"
         android:textSize="12sp"
         android:textColor="#9E9E9E"
         android:gravity="center"
