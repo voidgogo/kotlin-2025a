@@ -21,4 +21,11 @@
         android:text="인사 앱"
         android:layout_marginBottom="16dp"/>
 
+    <Button
+        android:id="@+id/buttonColor"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="색깔 변경 앱"
+        android:layout_marginBottom="16dp"/>
+
 </LinearLayout>
