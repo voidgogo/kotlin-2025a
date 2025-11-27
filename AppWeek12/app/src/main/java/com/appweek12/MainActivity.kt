@@ -5,67 +5,68 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.appweek12.databinding.ActivityMainBinding
 
+import androidx.activity.viewModels
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var count = 0
+    /**
+     * by viewModels(): ViewModel을 자동 관리
+     * 화면 회전해도 ViewModel은 살아있음
+     */
+    private val viewModel: CounterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // savedInstanceState로 복원 시도 (번거로움)
-        if (savedInstanceState != null) {
-            count = savedInstanceState.getInt("count", 0)
-        }
+        // onSaveInstanceState 필요 없음!
+        // ViewModel이 자동으로 처리
 
+        setupObservers()
         setupListeners()
-        updateCountDisplay()
     }
 
     /**
-     * 화면 회전 시 데이터 저장 (복잡함)
-     * 이것도 문제: 번들 크기에 제한 있음
+     * LiveData 관찰
+     * count가 변할 때마다 자동으로 UI 업데이트
      */
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("count", count)
+    private fun setupObservers() {
+        viewModel.count.observe(this) { count ->
+            binding.textViewCount.text = count.toString()
+
+            when {
+                count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
+                count < 0 -> binding.textViewCount.setTextColor(Color.RED)
+                else -> binding.textViewCount.setTextColor(Color.BLACK)
+            }
+        }
     }
 
+    /**
+     * 버튼 리스너
+     * ViewModel의 메소드만 호출
+     * UI 업데이트는 observe에서 처리
+     */
     private fun setupListeners() {
         binding.buttonPlus.setOnClickListener {
-            count++
-            updateCountDisplay()  // 매번 수동으로 UI 업데이트
+            viewModel.increment()
+            // updateCountDisplay() 호출 필요 없음!
+            // observe가 자동으로 처리
         }
 
         binding.buttonMinus.setOnClickListener {
-            count--
-            updateCountDisplay()
+            viewModel.decrement()
         }
 
         binding.buttonReset.setOnClickListener {
-            count = 0
-            updateCountDisplay()
+            viewModel.reset()
         }
 
         binding.buttonPlus10.setOnClickListener {
-            count += 10
-            updateCountDisplay()
-        }
-    }
-
-    /**
-     * 수동으로 UI 업데이트 (매번 호출해야 함)
-     */
-    private fun updateCountDisplay() {
-        binding.textViewCount.text = count.toString()
-
-        when {
-            count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
-            count < 0 -> binding.textViewCount.setTextColor(Color.RED)
-            else -> binding.textViewCount.setTextColor(Color.BLACK)
+            viewModel.incrementBy10()
         }
     }
 }
