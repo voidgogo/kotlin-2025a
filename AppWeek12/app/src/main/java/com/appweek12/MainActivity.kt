@@ -9,10 +9,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    /**
-     * 문제: Activity에 count를 직접 선언
-     * 화면 회전하면 onCreate가 다시 호출되고 count = 0으로 초기화됨!
-     */
     private var count = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +16,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // savedInstanceState로 복원 시도 (번거로움)
+        if (savedInstanceState != null) {
+            count = savedInstanceState.getInt("count", 0)
+        }
+
         setupListeners()
+        updateCountDisplay()
+    }
+
+    /**
+     * 화면 회전 시 데이터 저장 (복잡함)
+     * 이것도 문제: 번들 크기에 제한 있음
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("count", count)
     }
 
     private fun setupListeners() {
@@ -45,6 +56,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 수동으로 UI 업데이트 (매번 호출해야 함)
+     */
     private fun updateCountDisplay() {
         binding.textViewCount.text = count.toString()
 
