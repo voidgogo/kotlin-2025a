@@ -2,18 +2,21 @@ package com.appweek12
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.appweek12.databinding.ActivityMainBinding
-
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.appweek12.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     /**
-     * by viewModels(): ViewModel을 자동 관리
-     * 화면 회전해도 ViewModel은 살아있음
+     * StateFlow 버전도 by viewModels() 사용
+     * (LiveData와 동일하게 화면 회전 시 데이터 유지)
      */
     private val viewModel: CounterViewModel by viewModels()
 
@@ -22,39 +25,73 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // onSaveInstanceState 필요 없음!
-        // ViewModel이 자동으로 처리
-
         setupObservers()
         setupListeners()
     }
 
     /**
-     * LiveData 관찰
-     * count가 변할 때마다 자동으로 UI 업데이트
+     * StateFlow 관찰 설정
+     *
+     * LiveData vs StateFlow 수집 방법 비교:
+     *
+     * LiveData (observe):
+     *   viewModel.count.observe(this) { count ->
+     *       binding.textViewCount.text = count.toString()
+     *   }
+     *
+     * StateFlow (collect):
+     *   lifecycleScope.launch {
+     *       repeatOnLifecycle(Lifecycle.State.STARTED) {
+     *           viewModel.count.collect { count ->
+     *               binding.textViewCount.text = count.toString()
+     *           }
+     *       }
+     *   }
      */
     private fun setupObservers() {
-        viewModel.count.observe(this) { count ->
-            binding.textViewCount.text = count.toString()
+        /**
+         * lifecycleScope.launch
+         * - Activity의 lifecycle과 연동된 Coroutine Scope
+         * - Activity 파괴 시 자동으로 cancel됨
+         */
+        lifecycleScope.launch {
+            /**
+             * repeatOnLifecycle(Lifecycle.State.STARTED)
+             * - STARTED 상태(화면에 보임)에서만 collect
+             * - STOPPED 상태(화면에 안 보임)에서는 자동 취소
+             * - LiveData의 observe()와 동일한 효과
+             *
+             * 생명주기 상태:
+             *    CREATED → STARTED → RESUMED → PAUSED → STOPPED → DESTROYED
+             */
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                /**
+                 * viewModel.count.collect { count ->
+                 * - StateFlow를 수집
+                 * - count가 변할 때마다 실행
+                 * - collect는 suspend 함수 (람다도 suspend 함수)
+                 */
+                viewModel.count.collect { count ->
+                    binding.textViewCount.text = count.toString()
 
-            when {
-                count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
-                count < 0 -> binding.textViewCount.setTextColor(Color.RED)
-                else -> binding.textViewCount.setTextColor(Color.BLACK)
+                    when {
+                        count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
+                        count < 0 -> binding.textViewCount.setTextColor(Color.RED)
+                        else -> binding.textViewCount.setTextColor(Color.BLACK)
+                    }
+                }
             }
         }
     }
 
     /**
      * 버튼 리스너
-     * ViewModel의 메소드만 호출
-     * UI 업데이트는 observe에서 처리
+     * StateFlow 버전도 ViewModel 메소드만 호출
+     * UI 업데이트는 collect에서 처리 (LiveData와 동일)
      */
     private fun setupListeners() {
         binding.buttonPlus.setOnClickListener {
             viewModel.increment()
-            // updateCountDisplay() 호출 필요 없음!
-            // observe가 자동으로 처리
         }
 
         binding.buttonMinus.setOnClickListener {

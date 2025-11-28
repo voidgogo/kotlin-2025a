@@ -72,7 +72,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="After MVVM"
+        android:text="StateFlow"
         android:textSize="12sp"
         android:textColor="#FF5252"
         android:gravity="center"
