@@ -4,13 +4,14 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.appweek12.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
-//    private var count = 0;
-
     private val viewModel: CounterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,37 +19,28 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 아래 코드는 ViewModel이 자동으로 처리
-//        if(savedInstanceState != null){
-//            count = savedInstanceState.getInt("count", 0)
-//        }
-
         setupObservers()
         setupListeners()
-//        updateCountDisplay()
     }
 
     private fun setupObservers() {
-        viewModel.count.observe(this){
-            count -> binding.textViewCount.text = count.toString()
+        lifecycleScope.launch{
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.count.collect{
+                    count -> binding.textViewCount.text = count.toString()
 
-            when{
-                count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
-                count < 0 -> binding.textViewCount.setTextColor(Color.RED)
-                else -> binding.textViewCount.setTextColor(Color.BLACK)
+                    when{
+                        count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
+                        count < 0 -> binding.textViewCount.setTextColor(Color.RED)
+                        else -> binding.textViewCount.setTextColor(Color.BLACK)
+                    }
+                }
             }
         }
     }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putInt("count", count)
-//    }
-
     private fun setupListeners() {
         binding.buttonPlus.setOnClickListener {
-//            count++
-//            updateCountDisplay()
             viewModel.increment()
         }
         binding.buttonMinus.setOnClickListener {
@@ -61,14 +53,4 @@ class MainActivity : AppCompatActivity() {
             viewModel.incrementBy10()
         }
     }
-
-//    private fun updateCountDisplay(){
-//        binding.textViewCount.text = count.toString()
-//
-//        when{
-//            count > 0 -> binding.textViewCount.setTextColor(Color.GREEN)
-//            count < 0 -> binding.textViewCount.setTextColor(Color.RED)
-//            else -> binding.textViewCount.setTextColor(Color.BLACK)
-//        }
-//    }
 }
