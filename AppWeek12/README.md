@@ -515,6 +515,4 @@ To verify ViewModel's effectiveness:
 
 After completing Week 12, you've mastered ViewModel and StateFlow basics. Next:
 
-- **Week 13+**: Combine Room Database with ViewModel (Student Manager App)
-- **Week 13+**: Repository pattern for data abstraction
-- **Week 13+**: Retrofit for network integration
+- Week 13: Combine Room Database with ViewModel (Student Manager App) & Jetpack Compose
